@@ -18,6 +18,17 @@ const PropertySchema = new mongoose.Schema({
 
 module.exports = mongoose.model('Property', PropertySchema);
 
+//add a field to store the video URL and a flag to identify if a listing has a "Virtual Tour."
+const PropertySchema = new mongoose.Schema({
+  // ... existing fields ...
+  videoUrl: String, // URL from Cloudinary or YouTube/Vimeo
+  hasVirtualTour: { type: Boolean, default: false },
+  videoThumbnail: String
+});
+
+
+
+
 //Define location field
 const PropertySchema = new mongoose.Schema({
   address: String,
