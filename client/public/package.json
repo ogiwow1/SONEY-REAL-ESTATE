@@ -1,1 +1,10 @@
-
+{
+  "name": "soney-fullstack",
+  "version": "1.0.0",
+  "scripts": {
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install",
+    "build": "cd client && npm run build",
+    "start-production": "node server/server.js",
+    "deploy-check": "node scripts/env-check.js && npm run build && echo '🚀 SONEY is ready for launch!'"
+  }
+}
