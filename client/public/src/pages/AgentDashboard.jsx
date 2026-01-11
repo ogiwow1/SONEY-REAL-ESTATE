@@ -52,3 +52,30 @@ const BillingTab = ({ agentData }) => {
     </div>
   );
 };
+
+// POST: Add a new listing (For SONEY Agents)
+router.post('/add', async (req, res) => {
+  try {
+    const newProperty = new Property(req.body);
+    const savedProperty = await newProperty.save();
+    res.status(201).json(savedProperty);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// GET: Fetch properties based on Map Bounds
+router.get('/map-search', async (req, res) => {
+  const { nelat, nelng, swlat, swlng } = req.query;
+  try {
+    const properties = await Property.find({
+      'coordinates.lat': { $gte: swlat, $lte: nelat },
+      'coordinates.lng': { $gte: swlng, $lte: nelng }
+    });
+    res.json(properties);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+module.exports = router;
