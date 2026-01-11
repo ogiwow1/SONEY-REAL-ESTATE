@@ -50,3 +50,44 @@ export default function SoneyApp() {
     </div>
   );
 }
+
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+
+function MapTracker({ onBoundsChange }) {
+  const map = useMapEvents({
+    moveend: () => {
+      const bounds = map.getBounds();
+      onBoundsChange({
+        nelat: bounds.getNorthEast().lat,
+        nelng: bounds.getNorthEast().lng,
+        swlat: bounds.getSouthWest().lat,
+        swlng: bounds.getSouthWest().lng
+      });
+    },
+  });
+  return null;
+}
+
+const SoneyMap = ({ properties, setBounds }) => {
+  return (
+    <div className="h-[600px] w-full rounded-lg overflow-hidden shadow-inner">
+      <MapContainer center={[40.7128, -74.0060]} zoom={12} style={{ height: '100%', width: '100%' }}>
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <MapTracker onBoundsChange={setBounds} />
+        
+        {properties.map(prop => (
+          <Marker key={prop._id} position={[prop.coordinates.lat, prop.coordinates.lng]}>
+            <Popup>
+              <div className="font-sans">
+                <img src={prop.images[0]} className="w-full rounded" alt="home" />
+                <h3 className="font-bold text-lg mt-2">${prop.price.toLocaleString()}</h3>
+                <p className="text-xs text-gray-600">{prop.address}</p>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
+  );
+};
